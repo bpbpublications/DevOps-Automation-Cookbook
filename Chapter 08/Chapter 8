@@ -1,0 +1,245 @@
+# Installing Docker and Creating a Docker image
+# FROM python:3.8-slim. Navigate to the directory containing your Dockerfile and run:
+bash
+docker build -t my_python_image .
+
+# Deploying a Docker container locally
+# 1. Running the container: Execute the following command:
+bash
+docker run -d—name my_python_container my_python_image
+# 2. Accessing the container: To get a shell inside the running container, use:
+bash
+docker exec -it my_python_container /bin/bash
+
+# Setting up a Kubernetes cluster on a local machine
+# 2. Start Minikube: Initialize a local Kubernetes cluster with:
+bash
+minikube start
+# 4.	Verify the setup: Check the node status with:
+bash
+kubectl get nodes
+
+# Creating a Dockerfile to automate the creation of Docker images
+# Follow these steps to create a Dockerfile:
+# 1.Initialize a new directory: Create a new folder named docker_image_project and navigate into it:
+bash
+mkdir docker_image_project && cd docker_image_project
+# 2. Craft a Dockerfile: In the directory, create a new file named Dockerfile.
+# 3. For a basic Node.js application, your Dockerfile could look like:
+Dockerfile
+# Use an official Node.js runtime as the base image
+FROM node:14
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
+# Install application dependencies
+RUN npm install
+
+# Copy the entire application to the container
+COPY . .
+
+# Define the command to run the application
+CMD [”npm”, “start”]
+
+# Using Docker Compose to manage multi-container applications
+# 1.	Install Docker Compose: Depending on your OS, follow the official Docker documentation to install Docker Compose
+# 2.	Compose file: Create a docker-compose.yml in your project directory. Here is an illustration of a simple web application with a database:
+yml
+version: ‘3’
+services:
+web:
+build: .
+ports:
+“5000:5000”
+database:
+image: “mongo:latest”
+ports:
+“27017:27017”
+
+# Network and Volume Definitions in Docker Compose
+# Here's an example of how you can define network and volume configurations in a docker-compose.yml file:
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    networks:
+      - my_network
+    volumes:
+      - my_volume:/app/data
+  database:
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"
+    networks:
+      - my_network
+    volumes:
+      - my_volume:/data/db
+networks:
+  my_network:
+    driver: bridge
+volumes:
+  my_volume:
+
+# Building a Docker image from a Dockerfile and pushing it to DockerHub
+# Follow the given steps to build a Docker image from a Dockerfile and pushing it to DockerHub:
+# 1. Building the image: In your docker_image_project directory, run:
+bash
+docker build -t yourusername/yourimagename:latest .
+# 2. Logging into DockerHub: If not already logged in, enter:
+bash
+docker login
+# 3. Provide your DockerHub credentials.
+# 4. Pushing the image: Push your image to DockerHub using:
+bash
+docker push yourusername/yourimagename:latest
+
+# Creating and managing Docker networks for inter-container communication
+# Follow the given steps:
+# 1. Create a custom bridge network:
+bash
+docker network create my_custom_network
+# 2. Inspecting the network: View details and configurations of the created network using:
+bash
+docker network inspect my_custom_network
+# 3. Run containers within the network: Launch containers so they are connected to the custom network:
+bash
+docker run—network=my_custom_network -d—name my_container1 nginx
+# 4.Communication: Containers within the same network can communicate using container names as hostnames.
+
+# Recipe 8: Running a multi-container application using Docker Compose4
+# Here's an example of how you can define and use environment variables in a docker-compose.yml file:
+version: '3'
+services:
+  webapp:
+    image: my_web_app_image
+    ports:
+      - "8080:8080"
+    environment:
+      - DATABASE_URL=postgres://user:password@database:5432/mydatabase
+  database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mydatabase
+# Follow the given steps to run a multi-container application using Docker Compose:
+# 1. Compose file: Assuming a web application and a database, your docker-compose.yml might look like:
+yml
+version: ‘3’
+services:
+webapp:
+image: my_web_app_image
+ports:
+“8080:8080”
+networks:
+mynetwork
+database:
+image: postgres:latest
+networks:
+mynetwork
+
+networks:
+mynetwork:
+driver: bridge
+# 2. Start the multi-container application:
+bash
+docker-compose up -d
+
+# Recipe 9: Performing rolling updates on a Kubernetes cluster to minimize downtime
+# Rolling updates allow pods to be updated in a phased manner, ensuring high availability.
+# Follow the given steps to perform rolling updates:
+# 1. Assuming a deployment: Suppose you have a deployment named my-deployment running v1 of your application.
+# 2. Update the image for the deployment:
+bash
+kubectl set image deployment/my-deployment my-container=my-image:v2
+# 3. Monitor the update: Watch the update process in real-time:
+bash
+kubectl rollout status deployment/my-deployment
+$ 4. Rollback if needed: If something goes wrong with the update, revert to the previous state:
+bash
+kubectl rollout undo deployment/my-deployment
+
+
+# Recipe 10: Setting up a Kubernetes service to expose your application to the Internet
+# Follow the given steps:
+# 1. Define the service:
+# 2. Create a my-service.yaml file with the following content:
+yaml
+apiVersion: v1
+kind: Service
+metadata:
+name: my-service
+spec:
+selector:
+app: my-app
+ports:
+protocol: TCP port: 80 targetPort: 8080
+type: LoadBalancer
+# 3.	Deploy the service:
+bash
+kubectl apply -f my-service.yaml
+# 4.Access the service: After a few minutes, retrieve the LoadBalancer’s external IP using:
+bash
+kubectl get services
+
+# Using Kubernetes ConfigMaps and secrets to manage application configuration
+# ConfigMaps allow for parameterizing container applications, while secrets safely store sensitive information.
+# Follow the given steps for the same:
+# 1.	Create a ConfigMap:
+bash
+kubectl create configmap app-config—from-literal=app.color=blue—from-literal=app.mode=prod
+# 2.	Create a Secret:
+bash
+kubectl create secret generic app-secret—from-literal=api.key=123456789
+# 3.	Reference in a pod: Your pod configuration can use these as environment variables:
+yaml
+apiVersion: v1
+kind: Pod
+metadata:
+name: my-app-pod
+spec:
+containers:
+name: my-app-container
+image: my-app:latest
+env:
+name: APP_COLOR
+valueFrom:
+configMapKeyRef:
+name: app-config
+key: app.color
+name: API_KEY
+valueFrom:
+secretKeyRef:
+name: app-secret
+key: api.key
+
+
+# Recipe 12: Mounting a persistent volume in a Kubernetes pod to store data across restarts. Kubernetes volumes ensure data persistence beyond the pod lifecycle.
+# Follow the given steps:
+# 1.	Define a PersistentVolume (PV):
+# 2.	Create a file named my-pv.yaml:
+yaml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+name: my-pv
+spec:
+capacity:
+storage: 1Gi
+accessModes:
+ReadWriteOnce
+hostPath:
+path: “/mnt/data”
+# 3. Mount the PV in a pod: Update your pod configuration to include:
+yaml
+volumes:
+name: my-storage
+persistentVolumeClaim:
+claimName: my-pvc
+
+

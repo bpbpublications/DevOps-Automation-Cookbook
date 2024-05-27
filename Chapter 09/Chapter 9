@@ -1,0 +1,36 @@
+# Recipe 4: Deploying a stateful application using StatefulSets
+# Deploying a stateful application
+# 1.	Creating a StatefulSet: Begin by writing a StatefulSet YAML manifest for your database application. Define the application image, number of replicas, persistent volume claim for data storage, and any environment configurations, as shown:
+yaml
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: my-database
+spec:
+  serviceName: "db"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-database
+  template:
+    metadata:
+      labels:
+        app: my-database
+    spec:
+      containers:
+      - name: db
+        image: my-database-image
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: db-data
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: db-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

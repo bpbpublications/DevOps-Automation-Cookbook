@@ -1,0 +1,226 @@
+# Set Up the AWS Provider in main.tf: In your main.tf file, configure the AWS provider by specifying the region you want to work in. For example:
+provider "aws" {
+  region = "us-west-2"
+}
+
+
+# Declare an S3 Bucket Resource in main.tf: Inside your main.tf file, add the configuration to declare an S3 bucket resource. For example:
+provider "aws" {
+  region = "us-west-2"
+
+}
+resource "aws_s3_bucket" "my_bucket" {
+  bucket = "my-bucket"
+  acl    = "private"
+}
+
+
+# Configure Terraform Backend in main.tf: Specify the S3 bucket and DynamoDB table in your main.tf file to use for storing Terraform state. For example
+provider "aws" {
+  region = "us-west-2"
+
+}
+terraform {
+  backend "s3" {
+    bucket = "mybucket"
+    key    = "path/to/my/key"
+    region = "us-west-2"
+    dynamodb_table = "mytable"
+  }
+}
+
+
+# Define EC2 Instance Configuration in main.tf: Add the configuration to define an EC2 instance resource in your main.tf file. For example:
+provider "aws" {
+  region = "us-west-2"
+
+}
+resource "aws_instance" "my_instance" {
+  ami           = "ami-0c94855ba95c574c8" # Update with a valid AMI ID
+  instance_type = "t2.micro"
+  key_name      = "my-key-pair" # Update with your key pair name
+
+  tags = {
+    Name = "MyInstance"
+  }
+}
+
+# Add User Data Script to EC2 Configuration in ‘main.tf’: Include a user data script in your EC2 instance configuration to install and configure the web server. For example:
+provider "aws" {
+  region = "us-west-2"
+
+}
+resource "aws_instance" "web_server" {
+  ami           = "ami-0c94855ba95c574c8" # Update with a valid AMI ID
+  instance_type = "t2.micro"
+  key_name      = "my-key-pair" # Update with your key pair name
+
+  tags = {
+    Name = "WebServer"
+  }
+
+  user_data = <<-EOF
+              #!/bin/bash
+              yum update -y
+              yum install -y httpd
+              systemctl start httpd
+              systemctl enable httpd
+              echo "<h1>Welcome to My Web Server</h1>" > /var/www/html/index.html
+              EOF
+}
+
+# Define RDS Instance Configuration in ‘main.tf’: Add the configuration to define an RDS instance resource in your main.tf file. For example:
+provider "aws" {
+  region = "us-west-2"
+
+}
+resource "aws_db_instance" "my_db" {
+  allocated_storage    = 20
+  storage_type         = "gp2"
+  engine               = "mysql"
+  engine_version       = "5.7"
+  instance_class       = "db.t2.micro"
+  name                 = "mydb"
+  username             = "admin"
+  password             = "password"
+  parameter_group_name = "default.mysql5.7"
+  skip_final_snapshot  = true
+}
+
+# Create an S3 Bucket: Define an S3 bucket resource in your ‘main.tf’ file. Specify the bucket name and access control settings. Additionally, configure the bucket for website hosting by specifying the index document:
+
+provider "aws" {
+  region = "us-west-2"
+
+}
+resource "aws_s3_bucket" "web_app_bucket" {
+  bucket = "my-web-app-bucket" 
+  acl    = "public-read"       
+  
+  website {
+    index_document = "index.html"
+  }
+}
+
+# Upload Your Web Application:To upload your web application to the bucket, add:
+provider "aws" {
+  region = "us-west-2"
+
+}
+resource "aws_s3_bucket_object" "web_app_files" {
+  bucket = aws_s3_bucket.web_app_bucket.bucket 
+  key    = "index.html"                        
+  source = "path/to/your/index.html"            
+  acl    = "public-read"                         
+}
+
+# Define ALB Configuration: Start by defining a new ALB in your main.tf file:
+provider "aws" {
+  region = "us-west-2"
+
+}
+resource "aws_lb" "example" {
+  name               = "example-lb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.example.id]
+  subnets            = [aws_subnet.example1.id, aws_subnet.example2.id]
+
+  enable_deletion_protection = true
+}
+
+# Create ALB Listener: After defining the ALB, create a listener for it:
+provider "aws" {
+  region = "us-west-2"
+
+}
+resource "aws_lb_listener" "front_end" {
+  load_balancer_arn = aws_lb.example.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.front_end.arn
+  }
+}
+
+# Implementing Network Infrastructure Using Terraform, we will use Terraform to set up a Virtual Private Cloud (VPC) on AWS.
+# In your 'main.tf', add the following configuration to create a VPC:
+provider "aws" {
+  region = "us-west-2"
+
+}
+resource "aws_vpc" "example" {
+  cidr_block = "10.0.0.0/16"
+}
+# Next, define a subnet within the VPC
+resource "aws_subnet" "example" {
+  vpc_id     = aws_vpc.example.id
+  cidr_block = "10.0.1.0/24"
+}
+# You can also add an internet gateway to the VPC to allow instances within the VPC to access the internet:
+resource "aws_internet_gateway" "example" {
+  vpc_id = aws_vpc.example.id
+ }
+
+
+# Create EC2 Instance: In main.tf, create an EC2 instance:
+provider "aws" {
+  region = "us-west-2"
+
+}
+
+# Create an EC2 instance
+resource "aws_instance" "example" {
+  ami           = "ami-0c94855ba95c574c8"
+  instance_type = "t2.micro"
+}
+# Create an EBS volume and attach it to the EC2 instance
+resource "aws_ebs_volume" "example" {
+  availability_zone = aws_instance.example.availability_zone
+  size              = 1
+}
+resource "aws_volume_attachment" "ebs_att" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.example.id
+  instance_id = aws_instance.example.id
+  depends_on  = [aws_instance.example]
+}
+
+
+# Define EC2 Instance: Specify an AWS EC2 instance in your Terraform configuration, including its AMI, instance type, and other specifications:
+provider "aws" {
+  region = "us-west-2"
+
+}
+resource "aws_instance" "example" {
+  ami           = "ami-0c94855ba95c574c8"
+  instance_type = "t2.micro"
+  
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+# Define Launch Configuration: Specify a launch configuration in your Terraform configuration, including details such as the AMI, instance type, and other settings
+provider "aws" {
+  region = "us-west-2"
+
+}
+
+# Define a launch configuration for the Auto Scaling group
+resource "aws_launch_configuration" "example" {
+  name          = "example"
+  image_id      = "ami-001dbdb3cc39b5200"
+  instance_type = "t2.micro"
+}
+# Define an Auto Scaling group using the launch configuration
+resource "aws_autoscaling_group" "example" {
+  launch_configuration = aws_launch_configuration.example.id
+  min_size            = 1
+  max_size            = 5
+  desired_capacity    = 3
+  vpc_zone_identifier = [aws_subnet.example.id]
+}
+

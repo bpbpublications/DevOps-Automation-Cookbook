@@ -1,0 +1,46 @@
+# Write Terraform Configuration: Inside your project directory, create a new file with a .tf extension. This file will contain your Terraform configuration written in HashiCorp Configuration Language (HCL). Here's an example code snippet for creating an AWS EC2 
+provider "aws" {
+  region = "us-east-1"
+}
+resource "aws_instance" "example" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+	}
+
+
+# Write Ansible Playbook: Inside your project directory, create a YAML file with a .yml extension. This file will contain your Ansible playbook, defining the tasks to be executed. Here's an example playbook to install a package on a server
+- name: Install nginx package
+  hosts: servers
+  tasks:
+    - name: Install nginx
+      apt:
+        name: nginx
+	       state: present
+
+
+# Write Pipeline Stages: Define stages in your Jenkins pipeline, such as installing dependencies, pulling code, and applying it to your infrastructure. Here's an example Jenkinsfile.
+pipeline {
+  agent any
+  
+  stages {
+    stage('Initialize') {
+      steps {
+        sh 'terraform init'
+      }
+    }
+    
+    stage('Plan') {
+      steps {
+        sh 'terraform plan'
+      }
+    }
+    
+    stage('Apply') {
+      steps {
+        sh 'terraform apply --auto-approve'
+      }
+    }
+  }
+}
+
+

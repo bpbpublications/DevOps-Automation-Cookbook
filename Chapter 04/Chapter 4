@@ -1,0 +1,297 @@
+# Verification of install Git for Windows: If you want to execute the git --version command directly in Command Prompt or PowerShell to verify Git installation, you can simply open the respective terminal and type:
+git --version
+
+#For macOS: Open Terminal on your macOS. You can find it by searching for "Terminal" in Spotlight or by navigating to Applications -> Utilities -> Terminal.
+brew install git
+# Once the installation is complete, you can verify that Git has been installed correctly by typing:
+git --version
+
+# To install Git on Debian/Ubuntu Linux distributions using the package manager, you can follow these steps
+# Open a terminal. You can usually find it in the applications menu or by searching for "Terminal".
+# Once you have the terminal open, use the following command to update the package lists for upgrades and new package installations:
+sudo apt update
+
+# After updating the package lists, you can use the following command to install Git: This command will install Git along with its dependencies.
+sudo apt install git
+
+# For Fedora:
+sudo yum install git
+
+# Depending on your system's configuration, you may need to enter your password to confirm the installation. Enter your password when prompted and press Enter.
+# After entering your password, the terminal will display the amount of disk space that will be used for the installation. Type Y and press Enter to confirm and proceed with the installation.
+# Once the installation is complete, you can verify that Git has been installed correctly by typing:
+git --version
+
+# Initializing a local repository. Follow the given steps to initialize a local repository:
+# Navigate to your project directory or create a new one. For Unix-like systems (Linux, macOS):
+mkdir my_project
+cd my_project
+
+# Initialize Git repository
+git init
+
+# For Windows:In Command Prompt:
+:: Navigate to your project directory or create a new one
+mkdir my_project
+cd my_project
+
+:: Initialize Git repository
+git init
+
+# Connecting to a remote repository using GitHub
+# Link local to remote: Navigate to your local project directory in your terminal and use the following command to link your local repository to the remote GitHub repository:
+git remote add origin [URL]
+
+# Replace [URL] with the URL of your GitHub repository. Typically, it will look something like: https://github.com/your_username/my_project.git.Example:
+git remote add origin https://github.com/your_username/my_project.git
+
+# Push initial commit: Before pushing your code to the remote repository, you need to make an initial commit in your local repository. First, add all the files to the staging area and then commit them with a commit message:
+git add .
+git commit -m "Initial commit"
+
+# Now, you can push your commit to the remote repository:
+git push -u origin master
+
+# Clone with HTTPS: Navigate to your desired directory in the terminal and use the following command to clone the repository:
+git clone [URL]
+# Replace [URL] with the HTTPS URL of the repository. For example, if you are cloning from GitHub, it would look like: https://github.com/username/repo_name.git.
+# Navigate to the repository:
+cd repo_name
+# Branch creation and switching:Create a new branch:
+git branch feature-x
+
+#Switch to the new branch:
+bash
+git checkout feature-x
+# Tip: You can create and switch to a new branch in a single command using:
+git checkout -b feature-x
+
+# Committing changes to a branch: Make some changes: Modify or add some files in the project.
+# Stage the changes: Before committing, you need to stage your changes. This prepares them for the commit:
+git add .
+# The . stages all changes in the directory. For specific files, replace . with the file name.
+
+# Commit the changes:
+git commit -m "Implemented feature-x"
+
+# After committing your changes, you can push them to the remote repository:
+git push origin feature-x
+
+# To push your changes to a remote repository, you can follow these steps:
+# 1. Set upstream branch: If this is the first time you are pushing this branch, you will need to set an upstream branch on the remote repository:
+git push -u origin feature-x
+
+#2. Push changes: If you have already set the upstream or are pushing more changes to the same branch later on, you can simply use:
+git push
+
+#To add files to a Git repository, you can follow these steps:
+# 1. Using the git add command: When you make changes to your files, Git identifies them but does not automatically track them. The git add command stages these changes for a commit.
+# 2. Stage individual files:
+git add filename.ext
+
+#3. Stage all changes in the directory:
+git add .
+
+# After staging your changes using git add, you can proceed to commit these changes to the repository using git commit. For example:
+git commit -m "Added filename.ext"
+
+# To implement a .gitignore file in your Git repository, follow these steps:
+# 1. Create a .gitignore file: In the root directory of your repository, create a file named .gitignore.
+# 2. Specify patterns: Inside the .gitignore file, add patterns for files or directories you want Git to ignore. Each pattern specifies a file or directory to ignore. For example:
+bash
+*.log
+temp/
+
+# To commit changes in Git, you have two common options:
+# 1. Commit staged changes: After staging changes with git add, you can commit those changes using the following command:
+bash
+git commit -m "Your meaningful message here"
+
+# 2. Committing directly: If you have modified a tracked file and want to directly commit it without staging it explicitly, you can use the following command:
+bash
+git commit -a -m "Your message here"
+
+#Understanding your project’s history is pivotal. The git log command shows a list of commits made in a repository:
+# •	Basic log view:
+bash
+git log
+
+#	Condensed view: To view just the commit checksum and message:
+lua
+git log—oneline
+
+#	Graph view: To visualize branches and merge points:
+css
+git log—oneline—graph
+
+#	Filter by author:
+bash
+git log—author=”Author Name”
+
+#	Filter by date: Display commits from the last two weeks, for instance:
+lua
+git log—since=2.weeks
+
+# 1.Add a remote repository:Replace [URL] with the repository’s URL. This command assigns the name origin to the given URL.
+csharp
+git remote add origin [URL]
+
+# 2. List remote repositories:This displays the URLs of remote repositories associated with the local one.
+git remote -v
+
+# 3.Remove a remote:This command removes the remote named origin, leveraging the git push command, and pushing transfers commits from your local repository to a remote repo.
+bash
+git remote rm origin
+
+#4.Push a branch to remote:This pushes your branch_name to the remote repository associated with origin.
+perl
+git push origin branch_name
+
+#5.Push all branches:This command pushes all branches to the remote, understanding git pull to synchronize the local codebase.
+css
+git push—all origin
+
+# 6.	Pull changes:This fetches changes from the remote’s branch_name and merges them into your local branch
+git pull origin branch_name
+
+# Differentiating between git fetch and git pull
+# git fetch: Fetches changes from a remote but does not merge them. It is useful to see updates before integrating them, as shown:
+git fetch origin
+
+#Approaching merge conflicts during a pull
+
+# Mark the conflict as resolved: After editing the file, stage it as:
+csharp
+git add conflicted_file.ext
+
+# 5.	Finalize the merge: If you were pulling changes, finalize the merge:
+git commit
+
+# Deleting a local branch:
+git branch -d branch_name
+
+# In Git, you can forcefully delete a branch using the -D option with the git branch command. This option is useful when you want to delete a branch regardless of whether it has been merged into another branch or not.
+bash
+git branch -D branch_name
+
+#To delete a remote branch in Git, you can use the git push command with the --delete option, followed by the name of the remote branch you want to delete. Here's the command syntax:
+bash
+git push <remote_name> --delete <branch_name>
+
+#To remove stale remote tracking branches that have been deleted from the remote repository, you can use the git fetch command with the --prune option. Here's the command syntax:
+git fetch --prune
+
+# Basic merge: If you are on your main branch and want to incorporate changes from a feature-branch, you would:
+bash
+git checkout main
+git merge feature-branch
+
+# Fast-forward merge:Example: If main has not changed since feature-branch was branched off, a fast-forward merge will occur. To execute a fast-forward merge:
+bash
+git checkout main
+git merge feature-branch
+
+# 3-way merge: This is more intricate. It occurs when the merging branches have diverged and both have new commits of their own. Git creates a new snapshot that results from merging the two and creates a new commit that points to this snapshot.To perform a 3-way merge:
+bash
+git checkout main
+git merge feature-branch
+
+# When Git encounters a merge conflict during a merge operation, it will display a message indicating the conflict. The message typically looks like this:
+Auto-merging file.txt
+CONFLICT (content): Merge conflict in file.txt
+
+# When you open a conflicted file in a text editor, Git inserts markers to clearly indicate the conflicting sections. These markers help you identify and manually resolve the conflict.Here's what the conflict markers look like:
+css
+<<<<<<< HEAD
+Code from your current branch
+=======
+Code from the branch you’re trying to merge
+>>>>>>> branch_name
+
+# 4.	Completing the merge:After resolving all conflicts and removing the markers, you need to commit the changes:
+git add file.txt
+git commit -m “Resolved merge conflicts from feature-branch”
+
+# Basic revert: If you have just made a commit and immediately realize it was a mistake, you can revert it:
+git revert HEAD
+
+# Identifying the commit: To revert a specific commit, you first need its hash. Use git log to view the commit history and note the hash of the commit you want to revert.
+bash
+git log
+
+#2.	Reverting the commit: Once you have the commit hash, use:
+php
+git revert <commit_hash>
+
+# Understanding your commit history is essential for informed reversion:Basic log view:
+bash
+git log
+
+# Compact view:
+bash
+git log—oneline
+
+# Graphical representation:
+bash
+git log—graph—decorate—oneline
+
+# Recognizing merge conflicts with git status Status check: Running git status post-merge will notify you of any conflicts. Unmerged paths indicate files with conflicts.
+git status
+
+# By invoking git diff, you can identify exactly where the discrepancies between branches exist:
+git diff
+
+# Finalizing the resolution: After resolving all conflicts, mark the file as resolved using:
+git add <filename>
+
+# Committing the resolved merge: Once all conflicts across files are addressed, conclude the merge with a commit:
+git commit -m “Resolved merge conflicts for <brief description>”
+
+# Processes for creating, listing, and deleting tags:
+# Lightweight tag: It is essentially a bookmark to a commit; no additional information is stored.
+git tag v1.0-lightweight
+#Annotated tag: These are stored as full objects in the Git database, containing extra information like the tagger, date, and message. They are recommended for releases.
+git tag -a v1.0 -m “First official release”
+#Listing tags:
+git tag
+
+# This lists all tags in your repository. For a more detailed view, use:
+git show v1.0
+
+#Deleting tags: Should you need to remove a tag (maybe it was incorrectly labeled), use:
+git tag -d v1.0
+
+# Pushing tags to a remote repository for shared visibility:
+# Pushing a single tag:
+git push origin v1.0
+# Pushing all tags:
+git push origin—tags
+
+# Techniques to stash changes and retrieve them subsequently
+# For stashing your changes, simply use:
+git stash
+#For a more descriptive stash, use:
+git stash save “Your descriptive message here”
+
+#Listing stashed changes:To see all your stashed modifications:
+git stash list
+
+# Applying a stash: To reapply the most recent stash:
+git stash apply
+
+# For a specific stash, we have:
+git stash apply stash@{stash_number}
+
+# Removing a stash: Once you have applied and integrated your stash, it is wise to clear it. Use:
+git stash drop stash@{stash_number}
+
+# Or to remove all stashes, use the following:
+git stash clear
+
+# Applying stashed changes across different branches Switch to the desired branch:
+git checkout feature-branch
+
+# Apply the stash using:
+git stash apply
+
+
